@@ -5,8 +5,10 @@
  * 25 perguntas (5 por pilar), escala 1-4, resultado com radar visual por pilar
  */
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toPng } from "html-to-image";
+import { jsPDF } from "jspdf";
 
 // ─── Dados ───────────────────────────────────────────────────────────────────
 
@@ -403,7 +405,7 @@ function RadarChart({ scores }: { scores: Record<string, number> }) {
   const dataPath = dataPoints.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ") + " Z";
 
   return (
-    <svg viewBox="0 0 300 300" className="w-full max-w-xs mx-auto">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" className="w-full max-w-xs mx-auto">
       {/* Grid */}
       {gridLevels.map((level) => {
         const pts = angles.map((a) => toXY(a, r * level));
@@ -444,6 +446,45 @@ export default function QuizSection() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const topRef = useRef<HTMLDivElement>(null);
+  const [gerandoPDF, setGerandoPDF] = useState(false);
+
+  const gerarPDF = async () => {
+    const elemento = document.getElementById("resultado-quiz");
+    if (!elemento) return;
+    
+    setGerandoPDF(true);
+    try {
+      const dataUrl = await toPng(elemento, { 
+        pixelRatio: 2, 
+        backgroundColor: "#0D0A07"
+      });
+      
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => { img.onload = resolve; });
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (img.height * pdfWidth) / img.width;
+      
+      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Diagnostico_${nome || "Performance"}.pdf`);
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      alert(`Houve um erro ao gerar o PDF: ${error instanceof Error ? error.message : String(error)}\nPor favor, atualize a página e tente novamente.`);
+    } finally {
+      setGerandoPDF(false);
+    }
+  };
+
+  useEffect(() => {
+    if (etapa === "resultado") {
+      const timer = setTimeout(() => {
+        gerarPDF();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [etapa]);
 
   const totalPerguntas = PERGUNTAS.length;
   const progresso = Math.round((perguntaAtual / totalPerguntas) * 100);
@@ -717,7 +758,7 @@ export default function QuizSection() {
 
           {/* ── RESULTADO ── */}
           {etapa === "resultado" && (
-            <motion.div key="resultado" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <motion.div key="resultado" id="resultado-quiz" className="p-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
               {/* Header do resultado */}
               <div className="text-center mb-12">
                 <p className="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-3">
@@ -779,6 +820,13 @@ export default function QuizSection() {
                   >
                     Quero Meu Plano de Ação →
                   </a>
+                  <button
+                    onClick={gerarPDF}
+                    disabled={gerandoPDF}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold tracking-[0.2em] uppercase border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C]/10 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {gerandoPDF ? "Gerando PDF..." : "Baixar PDF"}
+                  </button>
                   <button
                     onClick={reiniciar}
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold tracking-[0.2em] uppercase border border-[#C9A84C]/30 text-[#C9A84C]/70 hover:border-[#C9A84C]/60 hover:text-[#C9A84C] transition-all duration-300"
