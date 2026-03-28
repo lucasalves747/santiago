@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Próximo Passo - Diagnóstico</title>
+    <!-- Tailwind CSS (CDN for standalone HTML) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #0D0A07 0%, #1A1410 50%, #0D0A07 100%);
+            color: #F5F0E8;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
+
+    <!-- Background Decor -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent via-[#C9A84C]/30 to-transparent">
+        </div>
+        <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-t from-transparent via-[#C9A84C]/30 to-transparent">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-xl w-full text-center relative z-10">
+        <div class="border border-[#C9A84C]/20 p-10 md:p-14 shadow-2xl bg-[#C9A84C]/[0.04]">
+
+            <p class="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-4">
+                Diagnóstico Concluído
+            </p>
+
+            <h1 class="text-3xl md:text-5xl font-bold text-[#F5F0E8] mb-6 leading-tight">
+                Quer entender como aplicar isso na prática?
+            </h1>
+
+            <p class="text-[#F5F0E8]/70 mb-10 text-sm md:text-base leading-relaxed">
+                O seu PDF foi gerado e enviado para o nosso sistema. Agora, você tem a oportunidade de dar o próximo
+                passo e transformar esses resultados em ação real.
+            </p>
+
+            <div class="flex flex-col gap-4 max-w-sm mx-auto">
+                <!-- BOTÃO SIM (LINK PARA O VÍDEO / PRÓXIMA PÁGINA) -->
+                <a href="/vsl.html"
+                    class="group relative inline-flex items-center justify-center px-8 py-5 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 w-full"
+                    style="background: linear-gradient(135deg, #C9A84C, #E2C97E); color: #0D0A07;">
+                    <span>Sim, quero ver</span>
+                    <span class="ml-3 transition-transform group-hover:translate-x-1">→</span>
+                </a>
+
+                <!-- BOTÃO NÃO (LINK PARA WHATSAPP) -->
+                <!-- Substitua YOUR_PHONE_NUMBER pelo número real (ex: 5511999999999) -->
+                <a href="https://api.whatsapp.com/send?phone=YOUR_PHONE_NUMBER&text=Quero%20receber%20meu%20PDF%20e%20entender%20melhor%20minha%20situa%C3%A7%C3%A3o"
+                    target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center px-6 py-4 text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase border border-[#25D366]/60 text-[#25D366] hover:bg-[#25D366]/10 hover:border-[#25D366] transition-all duration-300 w-full mt-2">
+                    Não, prefiro conversar no WhatsApp
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

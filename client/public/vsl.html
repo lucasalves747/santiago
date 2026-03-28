@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vídeo - Próximo Passo</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #0D0A07 0%, #1A1410 50%, #0D0A07 100%);
+            color: #F5F0E8;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
+
+    <!-- Background decor -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent via-[#C9A84C]/30 to-transparent">
+        </div>
+        <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-t from-transparent via-[#C9A84C]/30 to-transparent">
+        </div>
+    </div>
+
+    <!-- Conteúdo -->
+    <div class="max-w-3xl w-full text-center relative z-10">
+        <div class="border border-[#C9A84C]/20 p-8 md:p-12 shadow-2xl bg-[#C9A84C]/[0.04]">
+
+            <p class="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-4">
+                Próximo Passo
+            </p>
+
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                Veja como aplicar isso na prática
+            </h1>
+
+            <p class="text-[#F5F0E8]/70 mb-8 text-sm md:text-base leading-relaxed">
+                Assista ao vídeo abaixo para entender exatamente como transformar o seu diagnóstico em resultados reais.
+            </p>
+
+            <!-- Vídeo -->
+            <div class="relative w-full aspect-video mb-8 border border-[#C9A84C]/20">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/SEU_VIDEO_AQUI"
+                    title="Vídeo explicativo" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <!-- Botão 
+            <a href="https://api.whatsapp.com/send?phone=YOUR_PHONE_NUMBER&text=Acabei%20de%20assistir%20o%20vídeo%20e%20quero%20avançar"
+                target="_blank"
+                class="group inline-flex items-center justify-center px-8 py-5 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300"
+                style="background: linear-gradient(135deg, #C9A84C, #E2C97E); color: #0D0A07;">
+
+                Quero aplicar isso agora
+                <span class="ml-3 transition-transform group-hover:translate-x-1">→</span>
+            </a>-->
+
+        </div>
+    </div>
+
+</body>
+
+</html>

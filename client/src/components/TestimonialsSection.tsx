@@ -1,8 +1,8 @@
 // DESIGN: "Força e Propósito" — Testimonials + Newsletter + Legacy Section
 
 import { useEffect, useRef, useState } from "react";
-import { Quote, Mail, ArrowRight } from "lucide-react";
-import guidePdf from "../assets/5_pilares_performance_integral.pdf";
+import { Quote } from "lucide-react";
+
 
 const LEGACY_IMAGE = "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/69bcb7322f5f659fea58ce9c.jpeg";
 
@@ -49,6 +49,7 @@ export default function TestimonialsSection() {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -63,25 +64,20 @@ export default function TestimonialsSection() {
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && name) {
+    if (email && name && telefone) {
       try {
         await fetch("https://services.leadconnectorhq.com/hooks/PMW6fmu3oCfXFYueuN2D/webhook-trigger/e0cb8c17-fb7f-4ad7-ab1d-383735e96013", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name, email }),
+          body: JSON.stringify({ name, email, telefone }),
         });
       } catch (error) {
         console.error("Error submitting newsletter form:", error);
       } finally {
         setSubmitted(true);
-        const link = document.createElement("a");
-        link.href = guidePdf;
-        link.download = "5_pilares_performance_integral.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        window.location.href = "/pos-quiz.html";
       }
     }
   };
@@ -194,160 +190,7 @@ export default function TestimonialsSection() {
       </section>
 
       {/* Newsletter / Lead Magnet */}
-      <section id="newsletter" className="py-24 bg-dark overflow-hidden">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <div
-              className={`bg-dark-2 border border-[oklch(0.72_0.12_75/0.2)] p-10 md:p-16 transition-all duration-1000 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
-              {!submitted ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div>
-                    <div className="w-12 h-12 border border-gold flex items-center justify-center mb-6">
-                      <Mail size={20} className="text-gold" />
-                    </div>
-                    <span className="section-label block mb-4">Isca Digital Gratuita</span>
-                    <h3
-                      className="text-offwhite mb-4"
-                      style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
-                        fontWeight: 700,
-                      }}
-                    >
-                      Receba o Guia
-                      <br />
-                      <span className="text-gradient-gold">"Os 5 Pilares da Performance Integral"</span>
-                    </h3>
-                    <p
-                      className="text-[oklch(0.62_0.01_285)] text-sm leading-relaxed"
-                      style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                    >
-                      Um guia completo e gratuito com o método que já transformou centenas de líderes e empresários. Descubra em qual pilar você está mais vulnerável e como corrigir isso agora.
-                    </p>
-                    <div className="mt-6 space-y-2">
-                      {[
-                        "Diagnóstico dos 5 Pilares (PDF exclusivo)",
-                        "Checklist de Performance Integral",
-                        "Acesso à newsletter semanal com insights de alto nível",
-                      ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <span className="text-gold text-xs">◆</span>
-                          <span className="text-[oklch(0.68_0.01_285)] text-xs" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
-                            {item}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  <div>
-                    <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-                      <div>
-                        <label
-                          className="section-label block mb-2"
-                          htmlFor="nl-name"
-                        >
-                          Seu Nome
-                        </label>
-                        <input
-                          id="nl-name"
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Como posso te chamar?"
-                          required
-                          className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.40_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
-                          style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          className="section-label block mb-2"
-                          htmlFor="nl-email"
-                        >
-                          Seu Melhor E-mail
-                        </label>
-                        <input
-                          id="nl-email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="seu@email.com"
-                          required
-                          className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.40_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
-                          style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        className="btn-gold w-full flex items-center justify-center gap-2"
-                      >
-                        Quero o Guia Gratuito <ArrowRight size={16} />
-                      </button>
-                      <p
-                        className="text-[oklch(0.45_0.01_285)] text-[10px] text-center"
-                        style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                      >
-                        Seus dados estão seguros. Sem spam, apenas conteúdo de alto valor.
-                      </p>
-                    </form>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-8 px-4 max-w-3xl mx-auto">
-                  <h4
-                    className="text-offwhite text-3xl md:text-4xl mb-6"
-                    style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700 }}
-                  >
-                    Parabéns! Seu guia está a caminho.
-                  </h4>
-                  <p
-                    className="text-[oklch(0.70_0.01_285)] text-lg mb-8"
-                    style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                  >
-                    O material <strong className="text-gold">"Os 5 Pilares da Performance Integral"</strong> já começou a ser baixado no seu dispositivo.
-                    <br />
-                    Se não iniciar automaticamente, verifique seus downloads.
-                  </p>
-                  
-                  <div className="bg-dark/50 border border-[oklch(0.72_0.12_75/0.2)] p-8 md:p-12 text-left">
-                    <p className="text-[oklch(0.85_0.01_285)] text-lg mb-6 leading-relaxed" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
-                      Você já pode começar a aplicar hoje mesmo.<br /><br />
-                      Mas antes… <strong className="text-gold font-bold">não feche esta página.</strong>
-                      <br /><br />
-                      O que você recebeu agora é apenas a base.
-                      <br /><br />
-                      Se você realmente quer destravar mais energia, foco e performance em nível máximo, precisa entender como aplicar isso de forma completa e estratégica.
-                      <br /><br />
-                      Por isso, preparei um conteúdo rápido e direto ao ponto:
-                      <br /><br />
-                      Uma apresentação onde eu te mostro como transformar esses 5 pilares em um sistema prático que gera resultado real no seu dia a dia.
-                      <br /><br />
-                      <span className="italic text-gold">Sem teoria. Sem enrolação. Apenas o que funciona.</span>
-                    </p>
-
-                    <div className="text-center mt-10">
-                      <div className="text-3xl mb-4 animate-bounce">👇</div>
-                      <p className="text-offwhite font-bold mb-6 text-lg" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
-                        Clique abaixo e assista agora:
-                      </p>
-                      <a 
-                        href="https://link.salee.ai/widget/survey/Mufrh87YeRqFqFe3OS4m" 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-gold w-full md:w-auto inline-flex items-center justify-center gap-2 text-sm md:text-base py-4"
-                      >
-                        👉 SIM, QUERO VER COMO APLICAR OS 5 PILARES NA PRÁTICA
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

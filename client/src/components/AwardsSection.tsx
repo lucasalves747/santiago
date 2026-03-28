@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Award, Mic2, Globe, Users } from "lucide-react";
 
-const SPEAKING_IMAGE = "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/69bcb5a92f5f655c51589941.png";
+const SPEAKING_IMAGE = "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/69c733262e89d8a0815f0b01.png";
 
 const awards = [
   {
@@ -107,7 +107,7 @@ export default function AwardsSection() {
       </div>
 
       {/* Awards Grid */}
-      <div className="py-24 md:py-32 bg-dark">
+      {/*<div className="py-24 md:py-32 bg-dark">
         <div className="container">
           <div
             className={`mb-16 transition-all duration-1000 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -172,7 +172,7 @@ export default function AwardsSection() {
             })}
           </div>
         </div>
-      </div>
+      </div>*/}
     </section>
   );
 }

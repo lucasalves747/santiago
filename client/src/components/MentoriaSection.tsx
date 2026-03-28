@@ -48,7 +48,7 @@ const levels = [
 const benefits = [
   "Diagnóstico profundo de todos os 5 pilares da sua vida",
   "Plano de ação personalizado de 90 dias",
-  "Acompanhamento quinzenal com Dr. Santiago",
+  "Acompanhamento semanal com Dr. Santiago",
   "Acesso ao ecossistema de elite em Miami",
   "Introdução a investidores e parceiros estratégicos",
   "Comunidade exclusiva de líderes de alto nível",
@@ -98,12 +98,12 @@ export default function MentoriaSection() {
           >
             A Mentoria de Performance Integral não é para todos. É para os 1% que estão dispostos a fazer o trabalho que uma vida de excelência exige.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
             <a
               href="https://link.salee.ai/widget/survey/Mufrh87YeRqFqFe3OS4m"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-gold inline-flex items-center gap-2"
+              className="btn-gold inline-flex items-center gap-2 w-fit"
             >
               Aplicar para a Mentoria <ArrowRight size={16} />
             </a>

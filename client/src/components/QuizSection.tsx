@@ -7,8 +7,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { toPng } from "html-to-image";
-import { jsPDF } from "jspdf";
 
 // ─── Dados ───────────────────────────────────────────────────────────────────
 
@@ -440,51 +438,16 @@ function RadarChart({ scores }: { scores: Record<string, number> }) {
 // ─── Componente Principal ─────────────────────────────────────────────────────
 
 export default function QuizSection() {
-  const [etapa, setEtapa] = useState<"intro" | "quiz" | "resultado">("intro");
+  const [etapa, setEtapa] = useState<"intro" | "quiz" | "captura_cta" | "captura_form" | "resultado">("intro");
   const [perguntaAtual, setPerguntaAtual] = useState(0);
   const [respostas, setRespostas] = useState<Record<number, number>>({});
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
   const topRef = useRef<HTMLDivElement>(null);
   const [gerandoPDF, setGerandoPDF] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const gerarPDF = async () => {
-    const elemento = document.getElementById("resultado-quiz");
-    if (!elemento) return;
-    
-    setGerandoPDF(true);
-    try {
-      const dataUrl = await toPng(elemento, { 
-        pixelRatio: 2, 
-        backgroundColor: "#0D0A07"
-      });
-      
-      const img = new Image();
-      img.src = dataUrl;
-      await new Promise((resolve) => { img.onload = resolve; });
-
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (img.height * pdfWidth) / img.width;
-      
-      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Diagnostico_${nome || "Performance"}.pdf`);
-    } catch (error) {
-      console.error("Erro ao gerar PDF:", error);
-      alert(`Houve um erro ao gerar o PDF: ${error instanceof Error ? error.message : String(error)}\nPor favor, atualize a página e tente novamente.`);
-    } finally {
-      setGerandoPDF(false);
-    }
-  };
-
-  useEffect(() => {
-    if (etapa === "resultado") {
-      const timer = setTimeout(() => {
-        gerarPDF();
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [etapa]);
 
   const totalPerguntas = PERGUNTAS.length;
   const progresso = Math.round((perguntaAtual / totalPerguntas) * 100);
@@ -501,45 +464,85 @@ export default function QuizSection() {
       setPerguntaAtual(perguntaAtual + 1);
       scrollTop();
     } else {
-      const finalScores = calcularResultados(novas);
-      const finalPilarFraco = getPilarPrincipal(finalScores);
-      const totalScore = Object.values(finalScores).reduce((a, b) => a + b, 0);
-      const totalPct = Math.round((totalScore / 100) * 100);
+      setEtapa("captura_cta");
+      scrollTop();
+    }
+  }
 
-      const perfilQuiz = getPerfilGeral(totalPct);
-      const statusGeral = getNivel(totalScore / 5).label;
+  async function submitForm() {
+    if (!nome.trim() || !email.trim() || !telefone.trim()) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+    setLoading(true);
 
-      const chartConfig = {
-        type: 'radar',
-        data: {
-          labels: ['Saúde', 'Mente', 'Liderança', 'Negócios', 'Legado'],
-          datasets: [{
-            label: 'Performance',
-            data: [
-              (finalScores.saude / 20) * 100,
-              (finalScores.mente / 20) * 100,
-              (finalScores.lideranca / 20) * 100,
-              (finalScores.negocios / 20) * 100,
-              (finalScores.legado / 20) * 100
-            ],
-            backgroundColor: 'rgba(201,168,76,0.2)',
-            borderColor: '#C9A84C',
-            pointBackgroundColor: '#C9A84C'
-          }]
-        },
-        options: {
-          scale: { ticks: { min: 0, max: 100, display: false } }
-        }
-      };
-      const radarImageUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}`;
+    const finalScores = calcularResultados(respostas);
+    const finalPilarFraco = getPilarPrincipal(finalScores);
+    const totalScore = Object.values(finalScores).reduce((a, b) => a + b, 0);
+    const totalPct = Math.round((totalScore / 100) * 100);
 
-      const radarDinamico = {
-        saude: { pct: (finalScores.saude / 20) * 100, status: getNivel(finalScores.saude).label },
-        mente: { pct: (finalScores.mente / 20) * 100, status: getNivel(finalScores.mente).label },
-        lideranca: { pct: (finalScores.lideranca / 20) * 100, status: getNivel(finalScores.lideranca).label },
-        negocios: { pct: (finalScores.negocios / 20) * 100, status: getNivel(finalScores.negocios).label },
-        legado: { pct: (finalScores.legado / 20) * 100, status: getNivel(finalScores.legado).label },
-      };
+    const perfilQuiz = getPerfilGeral(totalPct);
+    const statusGeral = getNivel(totalScore / 5).label;
+
+    const chartConfig = {
+      type: 'radar',
+      data: {
+        labels: ['Saúde', 'Mente', 'Liderança', 'Negócios', 'Legado'],
+        datasets: [{
+          label: 'Performance',
+          data: [
+            (finalScores.saude / 20) * 100,
+            (finalScores.mente / 20) * 100,
+            (finalScores.lideranca / 20) * 100,
+            (finalScores.negocios / 20) * 100,
+            (finalScores.legado / 20) * 100
+          ],
+          backgroundColor: 'rgba(201,168,76,0.2)',
+          borderColor: '#C9A84C',
+          pointBackgroundColor: '#C9A84C'
+        }]
+      },
+      options: {
+        scale: { ticks: { min: 0, max: 100, display: false } }
+      }
+    };
+    const radarImageUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}`;
+
+    const radarDinamico = {
+      saude: { pct: (finalScores.saude / 20) * 100, status: getNivel(finalScores.saude).label },
+      mente: { pct: (finalScores.mente / 20) * 100, status: getNivel(finalScores.mente).label },
+      lideranca: { pct: (finalScores.lideranca / 20) * 100, status: getNivel(finalScores.lideranca).label },
+      negocios: { pct: (finalScores.negocios / 20) * 100, status: getNivel(finalScores.negocios).label },
+      legado: { pct: (finalScores.legado / 20) * 100, status: getNivel(finalScores.legado).label },
+    };
+    try {
+      const response = await fetch("https://zfmjeheozxmkibhoarlb.supabase.co/functions/v1/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbWplaGVvenhta2liaG9hcmxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MDY0OTQsImV4cCI6MjA5MDE4MjQ5NH0.UeUDEnJdWI6W6BGuyKCeGg9_fuabb7R2RzGsjAU3Q6g" },
+        body: JSON.stringify({
+          nome,
+          email,
+          telefone,
+          resultados: finalScores,
+          pilarFraco: finalPilarFraco,
+          scoreGeral: totalPct,
+          tituloPerfil: perfilQuiz.titulo,
+          descricaoPerfil: perfilQuiz.descricao,
+          statusGeral: statusGeral,
+          radarDinamico: radarDinamico,
+          radarImageUrl: radarImageUrl
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("Resposta completa:", data);
+      console.log("Success:", data.success);
+      console.log("URL do PDF:", data.url);
 
       try {
         fetch("https://services.leadconnectorhq.com/hooks/PMW6fmu3oCfXFYueuN2D/webhook-trigger/7968aee5-4503-417d-bc5f-0ed63afd3078", {
@@ -548,6 +551,7 @@ export default function QuizSection() {
           body: JSON.stringify({
             nome,
             email,
+            telefone,
             resultados: finalScores,
             pilarFraco: finalPilarFraco,
             scoreGeral: totalPct,
@@ -555,16 +559,22 @@ export default function QuizSection() {
             descricaoPerfil: perfilQuiz.descricao,
             statusGeral: statusGeral,
             radarDinamico: radarDinamico,
-            radarImageUrl: radarImageUrl
+            radarImageUrl: radarImageUrl,
+            pdfUrl: data.url
           }),
         });
       } catch (error) {
         console.error("Erro ao enviar webhook do quiz:", error);
       }
 
-      setEtapa("resultado");
-      scrollTop();
+    } catch (error) {
+      console.error("Erro ao enviar webhook do quiz:", error);
     }
+
+    setLoading(false);
+    // 🔥 REDIRECIONA
+    window.location.href = "/pos-quiz.html";
+    scrollTop();
   }
 
   function reiniciar() {
@@ -573,6 +583,7 @@ export default function QuizSection() {
     setRespostas({});
     setNome("");
     setEmail("");
+    setTelefone("");
     scrollTop();
   }
 
@@ -635,41 +646,9 @@ export default function QuizSection() {
                 ))}
               </div>
 
-              {/* Formulário */}
-              <div className="border border-[#C9A84C]/20 p-8 mb-8" style={{ background: "rgba(201,168,76,0.03)" }}>
-                <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-6 text-center">Seus Dados para o Diagnóstico</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <label className="block text-[#F5F0E8]/50 text-xs tracking-widest uppercase mb-2">Seu Nome</label>
-                    <input
-                      type="text"
-                      value={nome}
-                      onChange={(e) => setNome(e.target.value)}
-                      placeholder="Como posso te chamar?"
-                      className="w-full bg-transparent border border-[#C9A84C]/25 text-[#F5F0E8] placeholder-[#F5F0E8]/25 px-4 py-3 text-sm focus:outline-none focus:border-[#C9A84C]/60 transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#F5F0E8]/50 text-xs tracking-widest uppercase mb-2">Seu E-mail</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Para enviar seu diagnóstico"
-                      className="w-full bg-transparent border border-[#C9A84C]/25 text-[#F5F0E8] placeholder-[#F5F0E8]/25 px-4 py-3 text-sm focus:outline-none focus:border-[#C9A84C]/60 transition-colors"
-                    />
-                  </div>
-                </div>
-                <p className="text-[#F5F0E8]/30 text-xs text-center">Seus dados são confidenciais. Sem spam, apenas conteúdo de alto nível.</p>
-              </div>
-
               <div className="text-center">
                 <button
                   onClick={() => {
-                    if (!nome.trim() || !email.trim()) {
-                      alert("Por favor, preencha seu nome e e-mail para iniciar o diagnóstico.");
-                      return;
-                    }
                     setEtapa("quiz");
                   }}
                   className="group relative inline-flex items-center gap-3 px-12 py-5 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300"
@@ -756,88 +735,164 @@ export default function QuizSection() {
             </motion.div>
           )}
 
+          {/* ── CAPTURA CTA ── */}
+          {etapa === "captura_cta" && (
+            <motion.div key="captura_cta" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center py-20">
+              <p className="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-4">Finalizado</p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif" }} className="text-4xl md:text-5xl font-bold text-[#F5F0E8] mb-8 leading-tight">
+                Seu diagnóstico está pronto!
+              </h2>
+              <button
+                onClick={() => { setEtapa("captura_form"); scrollTop(); }}
+                className="group relative inline-flex items-center gap-3 px-12 py-5 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-xl shadow-[#C9A84C]/10"
+                style={{ background: "linear-gradient(135deg, #C9A84C, #E2C97E)", color: "#0D0A07" }}
+              >
+                <span>Baixe seu PDF completo agora</span>
+                <span className="transition-transform group-hover:translate-x-1">→</span>
+              </button>
+            </motion.div>
+          )}
+
+          {/* ── CAPTURA FORM ── */}
+          {etapa === "captura_form" && (
+            <motion.div key="captura_form" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="max-w-md mx-auto py-10">
+              <div className="border border-[#C9A84C]/20 p-8 shadow-2xl" style={{ background: "rgba(201,168,76,0.03)" }}>
+                <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-4 text-center">Para liberar seu PDF,</p>
+                <h3 className="text-2xl font-bold text-[#F5F0E8] text-center mb-8" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                  Preencha seus dados
+                </h3>
+                <div className="space-y-4 mb-8">
+                  <div>
+                    <label className="block text-[#F5F0E8]/50 text-xs tracking-widest uppercase mb-2">Seu Nome</label>
+                    <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full bg-transparent border border-[#C9A84C]/25 text-[#F5F0E8] placeholder-[#F5F0E8]/25 px-4 py-3 text-sm focus:outline-none focus:border-[#C9A84C]/60 transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-[#F5F0E8]/50 text-xs tracking-widest uppercase mb-2">Seu E-mail</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-transparent border border-[#C9A84C]/25 text-[#F5F0E8] placeholder-[#F5F0E8]/25 px-4 py-3 text-sm focus:outline-none focus:border-[#C9A84C]/60 transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-[#F5F0E8]/50 text-xs tracking-widest uppercase mb-2">Telefone / WhatsApp</label>
+                    <input type="tel" value={telefone} onChange={(e) => setTelefone(e.target.value)} className="w-full bg-transparent border border-[#C9A84C]/25 text-[#F5F0E8] placeholder-[#F5F0E8]/25 px-4 py-3 text-sm focus:outline-none focus:border-[#C9A84C]/60 transition-colors" />
+                  </div>
+                </div>
+                <button
+                  onClick={submitForm}
+                  disabled={loading}
+                  className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{ background: "linear-gradient(135deg, #C9A84C, #E2C97E)", color: "#0D0A07" }}
+                >
+                  {loading ? (
+                    <>
+                      {/* 🔥 Spinner */}
+                      <span className="w-5 h-5 border-2 border-[#0D0A07] border-t-transparent rounded-full animate-spin"></span>
+                      <span>Gerando PDF...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Receber Meu Diagnóstico</span>
+                      <span className="transition-transform group-hover:translate-x-1">→</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          )}
+
           {/* ── RESULTADO ── */}
-          {etapa === "resultado" && (
-            <motion.div key="resultado" id="resultado-quiz" className="p-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              {/* Header do resultado */}
+          {/* RESULTADO INVISÍVEL (USADO SÓ PARA PDF) */}
+          <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+            <div id="resultado-quiz" className="p-4">
+
+              {/* Header */}
               <div className="text-center mb-12">
                 <p className="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-3">
                   {nome ? `Diagnóstico de ${nome}` : "Seu Diagnóstico"}
                 </p>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif" }} className="text-4xl md:text-5xl font-bold text-[#F5F0E8] mb-2 leading-tight">
+
+                <h2
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  className="text-4xl md:text-5xl font-bold text-[#F5F0E8] mb-2 leading-tight"
+                >
                   {perfil.titulo}
                 </h2>
+
                 <div className="flex items-center justify-center gap-4 mb-4">
                   <div className="w-16 h-px bg-[#C9A84C]/40" />
-                  <span style={{ fontFamily: "'Cormorant Garamond', serif", color: "#C9A84C", fontSize: "48px", fontWeight: 700 }}>{totalPct}%</span>
+                  <span
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      color: "#C9A84C",
+                      fontSize: "48px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {totalPct}%
+                  </span>
                   <div className="w-16 h-px bg-[#C9A84C]/40" />
                 </div>
-                <p className="text-[#F5F0E8]/60 text-base leading-relaxed max-w-xl mx-auto">{perfil.descricao}</p>
+
+                <p className="text-[#F5F0E8]/60 text-base leading-relaxed max-w-xl mx-auto">
+                  {perfil.descricao}
+                </p>
               </div>
 
               {/* Radar + Barras */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div className="border border-[#C9A84C]/15 p-6" style={{ background: "rgba(201,168,76,0.03)" }}>
-                  <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-4 text-center">Mapa dos Pilares</p>
+                <div
+                  className="border border-[#C9A84C]/15 p-6"
+                  style={{ background: "rgba(201,168,76,0.03)" }}
+                >
+                  <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-4 text-center">
+                    Mapa dos Pilares
+                  </p>
                   <RadarChart scores={scores} />
                 </div>
-                <div className="border border-[#C9A84C]/15 p-6" style={{ background: "rgba(201,168,76,0.03)" }}>
-                  <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-6">Pontuação por Pilar</p>
+
+                <div
+                  className="border border-[#C9A84C]/15 p-6"
+                  style={{ background: "rgba(201,168,76,0.03)" }}
+                >
+                  <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-6">
+                    Pontuação por Pilar
+                  </p>
+
                   {PILARES.map((p) => (
                     <BarraPilar key={p.id} pilar={p} score={scores[p.id]} />
                   ))}
                 </div>
               </div>
 
-              {/* Pilar mais fraco — destaque */}
+              {/* Pilar mais fraco */}
               <div className="border-l-2 border-[#C9A84C] pl-6 mb-12 py-4">
-                <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-2">Atenção Prioritária</p>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif" }} className="text-2xl font-bold text-[#F5F0E8] mb-2">
+                <p className="text-[#C9A84C] text-xs font-bold tracking-[0.25em] uppercase mb-2">
+                  Atenção Prioritária
+                </p>
+
+                <h3
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  className="text-2xl font-bold text-[#F5F0E8] mb-2"
+                >
                   {pilarFracoInfo.icone} {pilarFracoInfo.nome}
                 </h3>
-                <p className="text-[#F5F0E8]/60 text-sm leading-relaxed mb-3">{pilarFracoInfo.descricao}</p>
+
+                <p className="text-[#F5F0E8]/60 text-sm leading-relaxed mb-3">
+                  {pilarFracoInfo.descricao}
+                </p>
+
                 <div className="flex flex-wrap gap-2">
                   {pilarFracoInfo.topicos.map((t) => (
-                    <span key={t} className="text-xs border border-[#C9A84C]/30 text-[#C9A84C]/80 px-3 py-1">◆ {t}</span>
+                    <span
+                      key={t}
+                      className="text-xs border border-[#C9A84C]/30 text-[#C9A84C]/80 px-3 py-1"
+                    >
+                      ◆ {t}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              {/* CTA */}
-              <div className="text-center border border-[#C9A84C]/20 p-10" style={{ background: "rgba(201,168,76,0.04)" }}>
-                <p className="text-[#C9A84C] text-xs font-bold tracking-[0.3em] uppercase mb-4">Próximo Passo</p>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif" }} className="text-3xl font-bold text-[#F5F0E8] mb-4">
-                  Transforme Este Diagnóstico<br />em um Plano de Ação Real
-                </h3>
-                <p className="text-[#F5F0E8]/55 text-sm leading-relaxed mb-8 max-w-md mx-auto">
-                  Agende uma sessão de diagnóstico aprofundado com o Dr. Santiago Vecina e descubra exatamente o que está limitando seu próximo nível.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
-                    href="#contato"
-                    className="inline-flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300"
-                    style={{ background: "linear-gradient(135deg, #C9A84C, #E2C97E)", color: "#0D0A07" }}
-                  >
-                    Quero Meu Plano de Ação →
-                  </a>
-                  <button
-                    onClick={gerarPDF}
-                    disabled={gerandoPDF}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold tracking-[0.2em] uppercase border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C]/10 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {gerandoPDF ? "Gerando PDF..." : "Baixar PDF"}
-                  </button>
-                  <button
-                    onClick={reiniciar}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold tracking-[0.2em] uppercase border border-[#C9A84C]/30 text-[#C9A84C]/70 hover:border-[#C9A84C]/60 hover:text-[#C9A84C] transition-all duration-300"
-                  >
-                    Refazer Diagnóstico
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
+            </div>
+          </div>
         </AnimatePresence>
       </div>
     </section>

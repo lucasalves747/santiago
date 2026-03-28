@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Sobre", href: "#sobre" },
   { label: "Os 5 Pilares", href: "#pilares" },
   { label: "Livros", href: "#livros" },
-  { label: "Premiações", href: "#premiacoes" },
+  { label: "Contratar palestras", href: "#premiacoes" },
   { label: "Diagnóstico", href: "#quiz" },
   { label: "Mentoria", href: "#mentoria" },
   { label: "Contato", href: "#contato" },
@@ -36,11 +36,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
           ? "bg-[oklch(0.08_0.005_285/0.97)] backdrop-blur-md border-b border-[oklch(0.72_0.12_75/0.2)] py-3"
           : "bg-transparent py-5"
-      }`}
+        }`}
     >
       <div className="container flex items-center justify-between">
         {/* Logo */}
