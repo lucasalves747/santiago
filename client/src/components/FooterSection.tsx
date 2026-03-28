@@ -6,7 +6,7 @@ import { Instagram, Youtube, Linkedin, MessageCircle, Mail, MapPin, Phone } from
 
 export default function FooterSection() {
   const [visible, setVisible] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", telefone: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -152,7 +152,7 @@ export default function FooterSection() {
             >
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                       <label className="section-label block mb-2" htmlFor="c-name">Nome</label>
                       <input
@@ -174,6 +174,19 @@ export default function FooterSection() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="seu@email.com"
+                        required
+                        className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.35_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
+                        style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+                      />
+                    </div>
+                    <div>
+                      <label className="section-label block mb-2" htmlFor="c-telefone">Telefone</label>
+                      <input
+                        id="c-telefone"
+                        type="tel"
+                        value={formData.telefone}
+                        onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                        placeholder="Seu telefone"
                         required
                         className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.35_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
                         style={{ fontFamily: "'Nunito Sans', sans-serif" }}
