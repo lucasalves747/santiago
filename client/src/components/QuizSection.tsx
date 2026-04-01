@@ -573,7 +573,7 @@ export default function QuizSection() {
 
     setLoading(false);
     // 🔥 REDIRECIONA
-    window.location.href = "/pos-quiz.html";
+    window.location.href = "https://drsantiagovecina.com/pos-quiz";
     scrollTop();
   }
 

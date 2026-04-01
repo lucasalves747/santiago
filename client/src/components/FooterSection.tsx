@@ -36,6 +36,15 @@ export default function FooterSection() {
     }
   };
 
+  const links = [
+    { label: "Sobre", id: "sobre" },
+    { label: "Pilares", id: "pilares" },
+    { label: "Livros", id: "livros" },
+    { label: "Contratar palestras", id: "premiacoes" }, // 👈 aqui resolve
+    { label: "Mentoria", id: "mentoria" },
+    { label: "Contato", id: "contato" },
+  ];
+
   return (
     <>
       {/* Contact Section */}
@@ -282,19 +291,18 @@ export default function FooterSection() {
               </div>
             </div>
 
-            {/* Nav Links */}
             <div className="flex flex-wrap justify-center gap-6">
-              {["Sobre", "Pilares", "Livros", "Premiações", "Mentoria", "Contato"].map((item) => (
+              {links.map((item) => (
                 <button
-                  key={item}
+                  key={item.id}
                   onClick={() => {
-                    const el = document.querySelector(`#${item.toLowerCase().replace("ç", "c").replace("ã", "a").replace("é", "e").replace("ô", "o").replace("premiações", "premiacoes")}`);
+                    const el = document.querySelector(`#${item.id}`);
                     if (el) el.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="text-[oklch(0.50_0.01_285)] hover:text-gold transition-colors duration-300 text-xs tracking-[0.1em] uppercase"
                   style={{ fontFamily: "'Nunito Sans', sans-serif" }}
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
             </div>

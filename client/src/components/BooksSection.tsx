@@ -70,7 +70,7 @@ export default function BooksSection() {
         console.error("Error submitting newsletter form:", error);
       } finally {
 
-        window.location.href = "/pos-quiz.html";
+        window.location.href = "https://drsantiagovecina.com/pos-quiz-livro";
       }
     }
   };
