@@ -1,4 +1,10 @@
 {
+    "rewrites": [
+        {
+            "source": "/desafio-21dias",
+            "destination": "https://santiago-mentorados.vercel.app"
+        }
+    ],
     "framework": "vite",
     "outputDirectory": "dist/public"
 }
