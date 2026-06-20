@@ -144,7 +144,6 @@ export default function BooksSection() {
               <div className="w-12 h-12 border border-gold flex items-center justify-center mb-6">
                 <Mail size={20} className="text-gold" />
               </div>
-              <span className="section-label block mb-4">Isca Digital Gratuita</span>
               <h3
                 className="text-offwhite mb-4"
                 style={{
