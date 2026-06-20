@@ -31,7 +31,7 @@ const levels = [
     desc: "Método REI e formações estruturadas para implementação de cultura e processos de performance.",
     price: "Sob Consulta",
     cta: "Conhecer os Programas",
-    url: "",
+    url: "https://bio.drsantiagovecina.com/",
     highlight: false,
   },
   {

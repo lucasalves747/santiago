@@ -2,36 +2,41 @@
 // Dark section with gold book cards and hover effects
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, ExternalLink } from "lucide-react";
+import { BookOpen, ExternalLink, X } from "lucide-react";
 import { Mail, ArrowRight } from "lucide-react";
 
 const books = [
   {
     number: "I",
-    title: "Vida Alinhada",
-    subtitle: "O Método para Prosperar Sem Destruir Sua Saúde e Família",
-    description:
-      "O livro que apresenta a tese central da Performance Integral. Um guia prático e profundo para líderes que querem construir sucesso real — com saúde, família e propósito alinhados.",
-    tags: ["Performance", "Saúde", "Propósito"],
-    available: true,
-  },
-  {
-    number: "II",
     title: "O Líder Integral",
     subtitle: "Como Liderar a Si Mesmo Antes de Liderar Qualquer Empresa",
     description:
       "Uma obra sobre a jornada interior da liderança. Dr. Santiago revela os princípios que transformam profissionais de sucesso em líderes de legado, capazes de influenciar gerações.",
     tags: ["Liderança", "Mentalidade", "Legado"],
     available: true,
+    pdfUrl:
+      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a36b4391c5d711b35adf2f1.pdf",
   },
   {
-    number: "III",
+    number: "II",
     title: "Negócios nos EUA",
     subtitle: "O Guia do Empresário Brasileiro para Prosperar no Mercado Americano",
     description:
       "O manual definitivo para brasileiros que querem expandir seus negócios para os EUA. Estratégia, networking, cultura e os bastidores do ecossistema de alto nível em Miami.",
     tags: ["Negócios", "EUA", "Internacionalização"],
+    available: true,
+    pdfUrl:
+      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a36b439c50697c411a0f66d.pdf",
+  },
+  {
+    number: "III",
+    title: "Vida Alinhada",
+    subtitle: "O Método para Prosperar Sem Destruir Sua Saúde e Família",
+    description:
+      "O livro que apresenta a tese central da Performance Integral. Um guia prático e profundo para líderes que querem construir sucesso real — com saúde, família e propósito alinhados.",
+    tags: ["Performance", "Saúde", "Propósito"],
     available: false,
+    pdfUrl: "",
   },
 ];
 
@@ -44,6 +49,8 @@ export default function BooksSection() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [selectedBook, setSelectedBook] = useState<typeof books[0] | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,6 +78,27 @@ export default function BooksSection() {
       } finally {
 
         window.location.href = "https://pages.drsantiagovecina.com/pos-quiz-livro";
+      }
+    }
+  };
+
+  const handleBookSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedBook) return;
+    if (email && name && telefone) {
+      setModalLoading(true);
+      try {
+        await fetch("https://services.leadconnectorhq.com/hooks/PMW6fmu3oCfXFYueuN2D/webhook-trigger/e0cb8c17-fb7f-4ad7-ab1d-383735e96013", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, telefone, livro: selectedBook.title }),
+        });
+      } catch (error) {
+        console.error("Error submitting book form:", error);
+      } finally {
+        window.location.href = selectedBook.pdfUrl;
       }
     }
   };
@@ -293,7 +321,7 @@ export default function BooksSection() {
 
               {/* CTA */}
               {book.available ? (
-                <button className="flex items-center gap-2 text-gold text-xs tracking-[0.15em] uppercase font-semibold hover:gap-3 transition-all duration-300 group-hover:text-gold-light" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
+                <button onClick={() => setSelectedBook(book)} className="flex items-center gap-2 text-gold text-xs tracking-[0.15em] uppercase font-semibold hover:gap-3 transition-all duration-300 group-hover:text-gold-light" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
                   Adquirir o Livro <ExternalLink size={14} />
                 </button>
               ) : (
@@ -306,6 +334,109 @@ export default function BooksSection() {
         </div>
       </div>
     </section>
+
+    {/* Modal de aquisição do ebook */}
+    {selectedBook && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ background: "rgba(0,0,0,0.8)" }}
+        onClick={() => setSelectedBook(null)}
+      >
+        <div
+          className="relative w-full max-w-md bg-dark-2 border border-[oklch(0.22_0.008_285)] p-8 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setSelectedBook(null)}
+            className="absolute top-4 right-4 text-[oklch(0.50_0.01_285)] hover:text-gold transition-colors"
+            aria-label="Fechar"
+          >
+            <X size={20} />
+          </button>
+
+          <span className="section-label block mb-2">Acesso ao Ebook</span>
+          <h3
+            className="text-offwhite text-2xl mb-2"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700 }}
+          >
+            {selectedBook.title}
+          </h3>
+          <p
+            className="text-[oklch(0.60_0.01_285)] text-sm mb-6 leading-relaxed"
+            style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+          >
+            Preencha seus dados para receber o ebook agora mesmo.
+          </p>
+
+          <form onSubmit={handleBookSubmit} className="space-y-4">
+            <div>
+              <label className="section-label block mb-2" htmlFor="bk-name">
+                Seu Nome
+              </label>
+              <input
+                id="bk-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Como posso te chamar?"
+                required
+                className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.40_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
+                style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+              />
+            </div>
+            <div>
+              <label className="section-label block mb-2" htmlFor="bk-telefone">
+                Seu Telefone
+              </label>
+              <input
+                id="bk-telefone"
+                type="text"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+                placeholder="(11) 99999-9999"
+                required
+                className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.40_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
+                style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+              />
+            </div>
+            <div>
+              <label className="section-label block mb-2" htmlFor="bk-email">
+                Seu Melhor E-mail
+              </label>
+              <input
+                id="bk-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
+                required
+                className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite placeholder:text-[oklch(0.40_0.01_285)] px-4 py-3 text-sm outline-none transition-colors duration-300"
+                style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={modalLoading}
+              className="btn-gold w-full flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {modalLoading ? (
+                "Enviando..."
+              ) : (
+                <>
+                  Receber o Ebook <ArrowRight size={16} />
+                </>
+              )}
+            </button>
+            <p
+              className="text-[oklch(0.45_0.01_285)] text-[10px] text-center"
+              style={{ fontFamily: "'Nunito Sans', sans-serif" }}
+            >
+              Seus dados estão seguros. Sem spam, apenas conteúdo de alto valor.
+            </p>
+          </form>
+        </div>
+      </div>
+    )}
   </>
   );
 }
