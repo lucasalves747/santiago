@@ -14,7 +14,6 @@ const credentials = [
   "Membro do ecossistema de alto nível de Pablo Marçal",
 ];
 
-
 export default function AboutSection() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
