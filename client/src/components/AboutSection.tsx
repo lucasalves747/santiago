@@ -81,15 +81,6 @@ export default function AboutSection() {
                 Dr. Santiago Vecina é médico, nutrólogo, empresário e mentor de alta performance. Sua trajetória única combina a precisão da ciência médica com a visão estratégica de quem construiu e reconstruiu negócios, e a sabedoria de quem passou pelo fundo do poço e emergiu transformado.
               </p>
             </div>
-
-            {/* CTA */}
-            <div className="mt-10">
-              <a href="https://link.salee.ai/widget/survey/Mufrh87YeRqFqFe3OS4m"><button
-                className="btn-gold"
-              >
-                Iniciar Minha Transformação
-              </button></a>
-            </div>
           </div>
         </div>
       </div>

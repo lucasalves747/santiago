@@ -16,7 +16,7 @@ const levels = [
   {
     level: "Nível 02",
     title: "Movimento",
-    desc: "Ambiente de conexão e networking entre empresários que buscam o próximo nível nos EUA.",
+    desc: "Ambiente de conexão e networking entre empresários",
     price: "Comunidade",
     cta: "Entrar na Comunidade",
     url: "https://chat.whatsapp.com/KBaQ1xqkOKtAy307G7I9KN?mode=gi_t",
