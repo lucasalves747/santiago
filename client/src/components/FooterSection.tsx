@@ -2,11 +2,11 @@
 // Dark footer with gold accents and social links
 
 import { useEffect, useRef, useState } from "react";
-import { Instagram, Youtube, Linkedin, MessageCircle, Mail, MapPin, Phone } from "lucide-react";
+import { Instagram, Youtube, Linkedin, MessageCircle } from "lucide-react";
 
 export default function FooterSection() {
   const [visible, setVisible] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", telefone: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", telefone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -80,52 +80,6 @@ export default function FooterSection() {
               >
                 Se você é um líder ou empresário que está pronto para o próximo nível — em saúde, negócios, família e legado — eu quero ouvir sua história. Preencha o formulário ou entre em contato diretamente.
               </p>
-
-              <div className="space-y-6 mb-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 border border-[oklch(0.72_0.12_75/0.3)] flex items-center justify-center flex-shrink-0">
-                    <MapPin size={16} className="text-gold" />
-                  </div>
-                  <div>
-                    <p className="section-label mb-0.5">Localização</p>
-                    <p className="text-[oklch(0.72_0.01_285)] text-sm" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
-                      Miami, Florida — EUA
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 border border-[oklch(0.72_0.12_75/0.3)] flex items-center justify-center flex-shrink-0">
-                    <MessageCircle size={16} className="text-gold" />
-                  </div>
-                  <div>
-                    <p className="section-label mb-0.5">WhatsApp</p>
-                    <a
-                      href="https://wa.me/13051234567"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[oklch(0.72_0.01_285)] text-sm hover:text-gold transition-colors duration-300"
-                      style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                    >
-                      +1 (305) 123-4567
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 border border-[oklch(0.72_0.12_75/0.3)] flex items-center justify-center flex-shrink-0">
-                    <Mail size={16} className="text-gold" />
-                  </div>
-                  <div>
-                    <p className="section-label mb-0.5">E-mail</p>
-                    <a
-                      href="mailto:contato@drsantiagovecina.com"
-                      className="text-[oklch(0.72_0.01_285)] text-sm hover:text-gold transition-colors duration-300"
-                      style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                    >
-                      contato@drsantiagovecina.com
-                    </a>
-                  </div>
-                </div>
-              </div>
 
               {/* Social Links */}
               <div>
@@ -203,24 +157,6 @@ export default function FooterSection() {
                     </div>
                   </div>
                   <div>
-                    <label className="section-label block mb-2" htmlFor="c-subject">Assunto</label>
-                    <select
-                      id="c-subject"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      required
-                      className="w-full bg-dark border border-[oklch(0.22_0.008_285)] focus:border-gold text-offwhite px-4 py-3 text-sm outline-none transition-colors duration-300"
-                      style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                    >
-                      <option value="" disabled>Selecione o assunto</option>
-                      <option value="mentoria">Mentoria de Performance Integral</option>
-                      <option value="palestra">Contratar para Palestra</option>
-                      <option value="livros">Sobre os Livros</option>
-                      <option value="parceria">Parceria Estratégica</option>
-                      <option value="outro">Outro</option>
-                    </select>
-                  </div>
-                  <div>
                     <label className="section-label block mb-2" htmlFor="c-message">Mensagem</label>
                     <textarea
                       id="c-message"
@@ -234,7 +170,7 @@ export default function FooterSection() {
                     />
                   </div>
                   <button type="submit" className="btn-gold w-full">
-                    Enviar Mensagem
+                    Agendar Conversa
                   </button>
                 </form>
               ) : (

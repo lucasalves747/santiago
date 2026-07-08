@@ -7,7 +7,6 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import PilarsSection from "@/components/PilarsSection";
 import BooksSection from "@/components/BooksSection";
-import AwardsSection from "@/components/AwardsSection";
 import QuizSection from "@/components/QuizSection";
 import MentoriaSection from "@/components/MentoriaSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -21,7 +20,6 @@ export default function Home() {
       <AboutSection />
       <PilarsSection />
       <BooksSection />
-      <AwardsSection />
       <QuizSection />
       <MentoriaSection />
       <TestimonialsSection />

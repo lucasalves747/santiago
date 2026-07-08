@@ -6,14 +6,6 @@ import { useEffect, useRef, useState } from "react";
 
 const ABOUT_IMAGE = "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/69bcb3d77e33efa90585354a.jpg";
 
-const credentials = [
-  "Médico formado com especialização em Nutrologia",
-  "Empresário com mais de 15 anos de experiência",
-  "Líder da Plataforma Global Miami",
-  "Mentor de Performance Integral para líderes brasileiros nos EUA",
-  "Membro do ecossistema de alto nível de Pablo Marçal",
-];
-
 export default function AboutSection() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -88,27 +80,6 @@ export default function AboutSection() {
               <p>
                 Dr. Santiago Vecina é médico, nutrólogo, empresário e mentor de alta performance. Sua trajetória única combina a precisão da ciência médica com a visão estratégica de quem construiu e reconstruiu negócios, e a sabedoria de quem passou pelo fundo do poço e emergiu transformado.
               </p>
-              <p>
-                Baseado em Miami, ele lidera a <strong className="text-offwhite">Plataforma Global</strong>, conectando empresários brasileiros ao ecossistema de alto nível nos EUA. Sua missão é clara: ajudar líderes a pararem de viver abaixo do potencial que Deus criou para eles.
-              </p>
-              <p>
-                Sua autoridade é construída em três camadas: <strong className="text-gold">vivida</strong> (uma história real de superação), <strong className="text-gold">técnica</strong> (medicina, fisiologia e metabolismo) e de <strong className="text-gold">ecossistema</strong> (mentoria e liderança no ambiente de alto nível).
-              </p>
-            </div>
-
-            {/* Credentials */}
-            <div className="mt-8 space-y-3">
-              {credentials.map((cred, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <span className="text-gold mt-1 text-xs">◆</span>
-                  <span
-                    className="text-[oklch(0.75_0.008_285)] text-sm"
-                    style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                  >
-                    {cred}
-                  </span>
-                </div>
-              ))}
             </div>
 
             {/* CTA */}
