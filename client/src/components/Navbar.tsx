@@ -81,16 +81,6 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA Desktop */}
-        <div className="hidden lg:block">
-          <button
-            onClick={() => handleNavClick("#mentoria")}
-            className="btn-gold text-xs"
-          >
-            Aplicar para Mentoria
-          </button>
-        </div>
-
         {/* Mobile menu button */}
         <button
           className="lg:hidden text-gold p-2"
@@ -114,12 +104,6 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => handleNavClick("#mentoria")}
-              className="btn-gold mt-2 text-center"
-            >
-              Aplicar para Mentoria
-            </button>
           </div>
         </div>
       )}
