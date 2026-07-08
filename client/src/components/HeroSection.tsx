@@ -112,33 +112,6 @@ export default function HeroSection() {
               Conhecer o Dr. Santiago
             </button>
           </div>
-
-          {/* Stats bar */}
-          <div
-            className={`flex flex-wrap gap-8 mt-16 pt-8 border-t border-[oklch(0.72_0.12_75/0.2)] transition-all duration-1000 delay-600 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            {[
-              { number: "15+", label: "Anos de Experiência" },
-              { number: "500+", label: "Líderes Transformados" },
-              { number: "3", label: "Livros Publicados" },
-              { number: "Miami", label: "Base de Operações" },
-            ].map((stat) => (
-              <div key={stat.label} className="flex flex-col">
-                <span
-                  className="text-gold text-3xl md:text-4xl font-bold"
-                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                >
-                  {stat.number}
-                </span>
-                <span
-                  className="text-[oklch(0.62_0.01_285)] text-xs tracking-[0.15em] uppercase mt-1"
-                  style={{ fontFamily: "'Nunito Sans', sans-serif" }}
-                >
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 

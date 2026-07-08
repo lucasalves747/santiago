@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Sobre", href: "#sobre" },
   { label: "Os 5 Pilares", href: "#pilares" },
   { label: "Livros", href: "#livros" },
-  { label: "Contratar palestras", href: "#premiacoes" },
   { label: "Diagnóstico", href: "#quiz" },
   { label: "Mentoria", href: "#mentoria" },
   { label: "Contato", href: "#contato" },
@@ -70,7 +69,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">
-          {navLinks.slice(0, 6).map((link) => (
+          {navLinks.slice(0, 5).map((link) => (
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}

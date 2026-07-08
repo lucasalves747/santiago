@@ -40,7 +40,6 @@ export default function FooterSection() {
     { label: "Sobre", id: "sobre" },
     { label: "Pilares", id: "pilares" },
     { label: "Livros", id: "livros" },
-    { label: "Contratar palestras", id: "premiacoes" }, // 👈 aqui resolve
     { label: "Mentoria", id: "mentoria" },
     { label: "Contato", id: "contato" },
   ];
