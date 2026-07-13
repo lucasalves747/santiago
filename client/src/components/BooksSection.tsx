@@ -19,17 +19,39 @@ const books = [
   },
   {
     number: "II",
-    title: "Negócios nos EUA",
-    subtitle: "O Guia do Empresário Brasileiro para Prosperar no Mercado Americano",
+    title: "O Médico do Corpo e da Alma",
+    subtitle: "Descubra Como Viver com Mais Saúde, Dignidade e Propósito",
     description:
-      "O manual definitivo para brasileiros que querem expandir seus negócios para os EUA. Estratégia, networking, cultura e os bastidores do ecossistema de alto nível em Miami.",
-    tags: ["Negócios", "EUA", "Internacionalização"],
+      "Uma introdução ao método que Dr. Santiago desenvolveu para transformar a saúde física e mental de milhões. Um convite a viver com mais dignidade, menos doenças e mais esperança.",
+    tags: ["Saúde", "Método", "Propósito"],
     available: true,
     pdfUrl:
-      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a36b439c50697c411a0f66d.pdf",
+      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a54db26a51e67f556ec06e6.pdf",
   },
   {
     number: "III",
+    title: "O Despertar de um Pai Órfão",
+    subtitle: "Reconstruindo Vidas, Reconectando Corações",
+    description:
+      "Uma obra íntima sobre paternidade, família e recomeço. Dr. Santiago compartilha a jornada de reconstruir vidas e reconectar corações a partir da própria experiência.",
+    tags: ["Família", "Paternidade", "Recomeço"],
+    available: true,
+    pdfUrl:
+      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a54db263b33a7a1d42386d3.pdf",
+  },
+  {
+    number: "IV",
+    title: "CEO Antifrágil",
+    subtitle: "Transformando Adversidade em Vantagem Competitiva",
+    description:
+      "O guia para líderes que querem prosperar no caos. Estratégias cientificamente embasadas para fortalecer corpo e mente, transformar adversidades em vantagem e construir um legado duradouro.",
+    tags: ["Liderança", "Performance", "Resiliência"],
+    available: true,
+    pdfUrl:
+      "https://assets.cdn.filesafe.space/PMW6fmu3oCfXFYueuN2D/media/6a54db873b33a7a1d4238c69.pdf",
+  },
+  {
+    number: "V",
     title: "Vida Alinhada",
     subtitle: "O Método para Prosperar Sem Destruir Sua Saúde e Família",
     description:
