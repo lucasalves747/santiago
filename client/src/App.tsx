@@ -3,12 +3,38 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Diagnostico from "./pages/Diagnostico";
 
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+// Roteamento mínimo por pathname (sem lib de router).
+// /diagnostico  →  página só do diagnóstico
+// qualquer outra rota  →  home
+function isRotaDiagnostico() {
+  const path = window.location.pathname.replace(/\/+$/, "").toLowerCase();
+  return (
+    path.endsWith("/diagnostico") ||
+    path.endsWith("/diagnostico.html") ||
+    window.location.hash.toLowerCase().startsWith("#/diagnostico")
+  );
+}
 
 function App() {
+  const [rota, setRota] = useState(() => (isRotaDiagnostico() ? "diagnostico" : "home"));
+
+  // Mantém a rota em sincronia com voltar/avançar do navegador
+  useEffect(() => {
+    const sync = () => setRota(isRotaDiagnostico() ? "diagnostico" : "home");
+    window.addEventListener("popstate", sync);
+    window.addEventListener("hashchange", sync);
+    return () => {
+      window.removeEventListener("popstate", sync);
+      window.removeEventListener("hashchange", sync);
+    };
+  }, []);
+
   useEffect(() => {
     setTimeout(() => {
       fetch('http://localhost:8081/save-html', {
@@ -23,7 +49,7 @@ function App() {
   // React montar a seção e antes das imagens do hero carregarem, caindo no topo.
   useEffect(() => {
     const hash = window.location.hash;
-    if (!hash) return;
+    if (!hash || rota === "diagnostico") return;
 
     let attempts = 0;
     let hits = 0;
@@ -47,14 +73,14 @@ function App() {
     }, 150);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [rota]);
 
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <Home />
+          {rota === "diagnostico" ? <Diagnostico /> : <Home />}
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -1,4 +1,8 @@
 {
     "framework": "vite",
-    "outputDirectory": "dist/public"
+    "outputDirectory": "dist/public",
+    "rewrites": [
+        { "source": "/diagnostico", "destination": "/index.html" },
+        { "source": "/diagnostico/", "destination": "/index.html" }
+    ]
 }
