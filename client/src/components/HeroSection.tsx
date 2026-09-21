@@ -68,7 +68,7 @@ export default function HeroSection() {
               letterSpacing: "-0.02em",
             }}
           >
-            Dr. Santiago
+            Dr. Santiago*
             <br />
             <span className="text-gradient-gold">Vecina</span>
           </h1>
