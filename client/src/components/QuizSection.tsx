@@ -321,6 +321,13 @@ const PERGUNTAS = [
   },
 ];
 
+// ─── Config ──────────────────────────────────────────────────────────────────
+
+// Função generate-pdf (Supabase, projeto "Site santiago").
+// A chave é publishable — pública por design, feita para uso no frontend.
+const PDF_ENDPOINT = import.meta.env.VITE_PDF_ENDPOINT || "https://fclzlgizmcrrxuinsttw.supabase.co/functions/v1/generate-pdf";
+const PDF_ANON_KEY = import.meta.env.VITE_PDF_ANON_KEY || "sb_publishable_f4lrS0pwxZUexjlvGfBL1w_CBN_V8Pf";
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function calcularResultados(respostas: Record<number, number>) {
@@ -515,11 +522,19 @@ export default function QuizSection() {
       negocios: { pct: (finalScores.negocios / 20) * 100, status: getNivel(finalScores.negocios).label },
       legado: { pct: (finalScores.legado / 20) * 100, status: getNivel(finalScores.legado).label },
     };
+    // Respostas individuais — usadas nas páginas por pilar do relatório
+    const perguntas = PERGUNTAS.map((p, i) => {
+      const pontos = respostas[i];
+      const opcao = p.opcoes.find((o) => o.pontos === pontos);
+      return { pilar: p.pilar, texto: p.texto, resposta: opcao?.texto ?? "", pontos: pontos ?? 0 };
+    });
+
     try {
-      const response = await fetch("https://zfmjeheozxmkibhoarlb.supabase.co/functions/v1/generate-pdf", {
+      const response = await fetch(PDF_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbWplaGVvenhta2liaG9hcmxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MDY0OTQsImV4cCI6MjA5MDE4MjQ5NH0.UeUDEnJdWI6W6BGuyKCeGg9_fuabb7R2RzGsjAU3Q6g" },
+        headers: { "Content-Type": "application/json", "apikey": PDF_ANON_KEY, "Authorization": `Bearer ${PDF_ANON_KEY}` },
         body: JSON.stringify({
+          perguntas,
           nome,
           email,
           telefone,
