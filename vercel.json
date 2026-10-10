@@ -3,6 +3,10 @@
     "outputDirectory": "dist/public",
     "rewrites": [
         { "source": "/diagnostico", "destination": "/index.html" },
-        { "source": "/diagnostico/", "destination": "/index.html" }
+        { "source": "/diagnostico/", "destination": "/index.html" },
+        { "source": "/medico-do-corpo-e-da-alma", "destination": "/medico-do-corpo-e-da-alma/index.html" },
+        { "source": "/medico-do-corpo-e-da-alma/", "destination": "/medico-do-corpo-e-da-alma/index.html" },
+        { "source": "/ceo-antifragil", "destination": "/ceo-antifragil/index.html" },
+        { "source": "/ceo-antifragil/", "destination": "/ceo-antifragil/index.html" }
     ]
 }
