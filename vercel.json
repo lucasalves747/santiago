@@ -7,6 +7,16 @@
         { "source": "/medico-do-corpo-e-da-alma", "destination": "/medico-do-corpo-e-da-alma/index.html" },
         { "source": "/medico-do-corpo-e-da-alma/", "destination": "/medico-do-corpo-e-da-alma/index.html" },
         { "source": "/ceo-antifragil", "destination": "/ceo-antifragil/index.html" },
-        { "source": "/ceo-antifragil/", "destination": "/ceo-antifragil/index.html" }
+        { "source": "/ceo-antifragil/", "destination": "/ceo-antifragil/index.html" },
+
+        { "source": "/tratamento", "destination": "/tratamento.html" },
+        { "source": "/tratamento/:path*", "destination": "/tratamento.html" },
+        { "source": "/ferramentas", "destination": "/tratamento.html" },
+        { "source": "/ferramentas/:path*", "destination": "/tratamento.html" },
+        { "source": "/aula", "destination": "/tratamento.html" },
+        { "source": "/obrigado", "destination": "/tratamento.html" },
+        { "source": "/privacidade", "destination": "/tratamento.html" },
+        { "source": "/aviso-medico", "destination": "/tratamento.html" },
+        { "source": "/admin/leads", "destination": "/tratamento.html" }
     ]
 }
